@@ -21,7 +21,7 @@ const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
   return middlewares;
 };
 
-const applyMiddlewares = (
+const applyMiddlewares: NavigationGuard = (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext
@@ -29,6 +29,7 @@ const applyMiddlewares = (
   if (!to.meta.middlewares) {
     return next();
   }
+
   const guards = checkMiddlewaresValidity(to.meta.middlewares);
 
   return evaluateGuards(guards, to, from, next);
