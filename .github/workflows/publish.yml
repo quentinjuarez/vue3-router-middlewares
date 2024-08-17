@@ -1,0 +1,50 @@
+name: Publish npm package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3 # Updated to latest version
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3 # Updated to latest version
+        with:
+          node-version: "16"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Enable Corepack and use Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@3.5.0 --activate
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Build package
+        if: ${{ success() }}
+        run: yarn build
+
+      - name: Bump package version (patch)
+        run: npm version patch -m "Bump version to %s"
+        env:
+          NPM_CONFIG_GIT_TAG_VERSION: "true"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0 # Ensure you use a stable version
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
