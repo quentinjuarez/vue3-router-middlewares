@@ -1,10 +1,12 @@
 import type {
-  RouteLocationNormalized,
+  RouteLocationNormalizedGeneric,
   NavigationGuardNext,
   NavigationGuard,
+  NavigationGuardWithThis,
 } from "vue-router";
 import evaluateGuards from "./guards";
 
+// Function to validate the middleware array
 const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
   if (!Array.isArray(middlewares)) {
     throw new Error("vue3-router-middlewares: Middlewares should be an array");
@@ -21,9 +23,10 @@ const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
   return middlewares;
 };
 
-const applyMiddlewares: NavigationGuard = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
+// Apply middlewares function
+const applyMiddlewares: NavigationGuardWithThis<undefined> = (
+  to: RouteLocationNormalizedGeneric,
+  from: RouteLocationNormalizedGeneric,
   next: NavigationGuardNext
 ) => {
   if (!to.meta.middlewares) {
