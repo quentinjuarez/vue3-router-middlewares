@@ -1,5 +1,5 @@
 import type {
-  RouteLocationNormalizedGeneric,
+  RouteLocationNormalized,
   NavigationGuardNext,
   NavigationGuard,
   NavigationGuardWithThis,
@@ -24,9 +24,9 @@ const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
 };
 
 // Apply middlewares function
-const applyMiddlewares: NavigationGuardWithThis<undefined> = (
-  to: RouteLocationNormalizedGeneric,
-  from: RouteLocationNormalizedGeneric,
+const applyMiddlewares: NavigationGuardWithThis<any> = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) => {
   if (!to.meta.middlewares) {
