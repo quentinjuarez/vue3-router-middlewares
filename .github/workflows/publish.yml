@@ -45,9 +45,10 @@ jobs:
           NPM_CONFIG_GIT_TAG_VERSION: "true"
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0 # Ensure you use a stable version
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
 
       - name: Publish to npm
         run: npm publish --access public
