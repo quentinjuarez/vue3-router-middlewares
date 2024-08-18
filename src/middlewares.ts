@@ -19,11 +19,7 @@ const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
 };
 
 // Apply middlewares function
-const applyMiddlewares: NavigationGuardWithThis<undefined> = (
-  to,
-  from,
-  next
-) => {
+const applyMiddlewares: NavigationGuardWithThis<any> = (to, from, next) => {
   if (!to.meta.middlewares) {
     return next();
   }
