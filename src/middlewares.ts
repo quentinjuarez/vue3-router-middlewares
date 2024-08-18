@@ -1,9 +1,4 @@
-import type {
-  RouteLocationNormalized,
-  NavigationGuardNext,
-  NavigationGuard,
-  NavigationGuardWithThis,
-} from "vue-router";
+import type { NavigationGuard, NavigationGuardWithThis } from "vue-router";
 import evaluateGuards from "./guards";
 
 // Function to validate the middleware array
@@ -24,10 +19,10 @@ const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
 };
 
 // Apply middlewares function
-const applyMiddlewares: NavigationGuardWithThis<any> = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
+const applyMiddlewares: NavigationGuardWithThis<undefined> = (
+  to,
+  from,
+  next
 ) => {
   if (!to.meta.middlewares) {
     return next();
