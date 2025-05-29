@@ -1,9 +1,11 @@
-import evaluateGuards from "../src/guards";
+import { describe, it, expect, vi } from "vitest";
+import evaluateGuards from "../../src/guards";
 import type { NavigationGuard, RouteLocationNormalized } from "vue-router";
 
 describe("evaluateGuards", () => {
   it("should call next() if no guards are left", () => {
-    const next = jest.fn();
+    const next = vi.fn();
+
     evaluateGuards(
       [],
       {} as RouteLocationNormalized,
@@ -15,10 +17,10 @@ describe("evaluateGuards", () => {
   });
 
   it("should call the guards in order", () => {
-    const guard1 = jest.fn((to, from, next) => next());
-    const guard2 = jest.fn((to, from, next) => next());
+    const guard1 = vi.fn((to, from, next) => next());
+    const guard2 = vi.fn((to, from, next) => next());
 
-    const next = jest.fn();
+    const next = vi.fn();
     const guards: NavigationGuard[] = [guard1, guard2];
 
     evaluateGuards(
@@ -34,10 +36,10 @@ describe("evaluateGuards", () => {
   });
 
   it("should stop if a guard passes an argument to next()", () => {
-    const guard1 = jest.fn((to, from, next) => next("stop"));
-    const guard2 = jest.fn();
+    const guard1 = vi.fn((to, from, next) => next("stop"));
+    const guard2 = vi.fn();
 
-    const next = jest.fn();
+    const next = vi.fn();
     const guards: NavigationGuard[] = [guard1, guard2];
 
     evaluateGuards(

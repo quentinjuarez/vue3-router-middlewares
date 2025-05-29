@@ -20,13 +20,24 @@ const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
 
 // Apply middlewares function
 const applyMiddlewares: NavigationGuardWithThis<any> = (to, from, next) => {
-  if (!to.meta.middlewares) {
+  const allMiddlewares: NavigationGuard[] = [];
+
+  if (!to.matched?.length) {
     return next();
   }
 
-  const guards = checkMiddlewaresValidity(to.meta.middlewares);
+  for (const record of to.matched) {
+    if (record.meta?.middlewares) {
+      const validGuards = checkMiddlewaresValidity(record.meta.middlewares);
+      allMiddlewares.push(...validGuards);
+    }
+  }
 
-  return evaluateGuards(guards, to, from, next);
+  if (allMiddlewares.length === 0) {
+    return next();
+  }
+
+  return evaluateGuards(allMiddlewares, to, from, next);
 };
 
 export default applyMiddlewares;

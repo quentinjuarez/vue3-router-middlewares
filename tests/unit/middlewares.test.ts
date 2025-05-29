@@ -1,13 +1,19 @@
-import applyMiddlewares from "../src/middlewares";
+import { describe, it, expect, vi } from "vitest";
+import applyMiddlewares from "../../src/middlewares";
 import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
 describe("applyMiddlewares", () => {
   it("should throw an error if middlewares are not an array", () => {
     const to = {
-      meta: { middlewares: "not-an-array" },
+      matched: [
+        {
+          meta: { middlewares: "not-an-array" },
+        },
+      ],
     } as unknown as RouteLocationNormalized;
+
     const from = {} as RouteLocationNormalized;
-    const next = jest.fn() as NavigationGuardNext;
+    const next = vi.fn() as NavigationGuardNext;
 
     expect(() => applyMiddlewares(to, from, next)).toThrow(
       "vue3-router-middlewares: Middlewares should be an array"
@@ -16,10 +22,15 @@ describe("applyMiddlewares", () => {
 
   it("should throw an error if any middleware is not a function", () => {
     const to = {
-      meta: { middlewares: [() => {}, "not-a-function"] },
+      matched: [
+        {
+          meta: { middlewares: [() => {}, "not-a-function"] },
+        },
+      ],
     } as unknown as RouteLocationNormalized;
+
     const from = {} as RouteLocationNormalized;
-    const next = jest.fn() as NavigationGuardNext;
+    const next = vi.fn() as NavigationGuardNext;
 
     expect(() => applyMiddlewares(to, from, next)).toThrow(
       "vue3-router-middlewares: Middleware should be a function"
@@ -27,14 +38,19 @@ describe("applyMiddlewares", () => {
   });
 
   it("should call the middlewares in sequence", () => {
-    const middleware1 = jest.fn((to, from, next) => next());
-    const middleware2 = jest.fn((to, from, next) => next());
+    const middleware1 = vi.fn((to, from, next) => next());
+    const middleware2 = vi.fn((to, from, next) => next());
 
     const to = {
-      meta: { middlewares: [middleware1, middleware2] },
+      matched: [
+        {
+          meta: { middlewares: [middleware1, middleware2] },
+        },
+      ],
     } as unknown as RouteLocationNormalized;
+
     const from = {} as RouteLocationNormalized;
-    const next = jest.fn() as NavigationGuardNext;
+    const next = vi.fn() as NavigationGuardNext;
 
     applyMiddlewares(to, from, next);
 
@@ -44,10 +60,26 @@ describe("applyMiddlewares", () => {
 
   it("should call the next function if there are no middlewares", () => {
     const to = {
-      meta: {},
+      matched: [
+        {
+          meta: {},
+        },
+      ],
     } as unknown as RouteLocationNormalized;
+
     const from = {} as RouteLocationNormalized;
-    const next = jest.fn() as NavigationGuardNext;
+    const next = vi.fn() as NavigationGuardNext;
+
+    applyMiddlewares(to, from, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should call the next function if there are no matched routes", () => {
+    const to = {} as unknown as RouteLocationNormalized;
+
+    const from = {} as RouteLocationNormalized;
+    const next = vi.fn() as NavigationGuardNext;
 
     applyMiddlewares(to, from, next);
 
