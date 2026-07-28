@@ -1,43 +1,58 @@
 {
   "name": "vue3-router-middlewares",
-  "version": "0.0.11",
-  "description": "A middleware handler for Vue 3 router using meta fields.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "1.0.0",
+  "description": "Apply middleware functions to Vue Router navigation through route meta fields.",
+  "keywords": [
+    "middleware",
+    "middlewares",
+    "navigation-guard",
+    "plugin",
+    "typescript",
+    "vue",
+    "vue-router",
+    "vue3"
+  ],
+  "homepage": "https://github.com/quentinjuarez/vue3-router-middlewares#readme",
+  "bugs": "https://github.com/quentinjuarez/vue3-router-middlewares/issues",
+  "license": "MIT",
+  "author": "quentinjuarez (https://www.quentinjuarez.dev)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quentinjuarez/vue3-router-middlewares.git"
+  },
   "files": [
     "dist",
     "src/types.d.ts"
   ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test:unit": "vitest run --config vitest.unit.config.mts",
-    "test:integration": "vitest run --config vitest.integration.config.mts"
-  },
-  "dependencies": {
-    "vue": "^3.x",
-    "vue-router": "^4.x"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt . '!**/global.d.ts'",
+    "format:check": "oxfmt --check . '!**/global.d.ts'",
+    "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build",
+    "release": "yarn verify && yarn npm publish"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "3.1.4",
-    "@vitest/ui": "^3.1.4",
-    "@vue/test-utils": "^2.4.6",
-    "jsdom": "^26.1.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.4"
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vue/compiler-dom": "^3.5.40",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^30.0.0",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/quentinjuarez/vue3-router-middlewares.git"
+  "peerDependencies": {
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0 || ^5.0.0"
   },
-  "keywords": [
-    "vue",
-    "vue3",
-    "vue-router",
-    "middlewares",
-    "plugin"
-  ],
-  "author": "quentinjuarez",
-  "license": "MIT",
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@3.8.6"
 }

@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createRouter, createMemoryHistory } from "vue-router";
-import { mount } from "@vue/test-utils";
-import { defineComponent } from "vue";
-import applyMiddlewares from "../../src/middlewares";
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { defineComponent } from 'vue';
+import { createRouter, createMemoryHistory } from 'vue-router';
+
+import applyMiddlewares from '../../src/middlewares';
 
 // Middleware mock
 const protectedMiddleware = vi.fn((_to, _from, next) => next());
@@ -11,35 +12,35 @@ const childMiddleware = vi.fn((_to, _from, next) => next());
 
 // Component mock
 const TestComponent = defineComponent({
-  template: "<div>Test Page</div>",
+  template: '<div>Test Page</div>',
 });
 
 const ParentComponent = defineComponent({
-  template: "<div>Parent Page <router-view /></div>",
+  template: '<div>Parent Page <router-view /></div>',
 });
 
 // Define routes with middleware
 const routes = [
   {
-    path: "/",
+    path: '/',
     component: TestComponent,
   },
   {
-    path: "/protected",
+    path: '/protected',
     component: TestComponent,
     meta: {
       middlewares: [protectedMiddleware],
     },
   },
   {
-    path: "/parent",
+    path: '/parent',
     component: ParentComponent,
     meta: {
       middlewares: [parentMiddleware],
     },
     children: [
       {
-        path: "child",
+        path: 'child',
         component: TestComponent,
         meta: {
           middlewares: [childMiddleware],
@@ -60,8 +61,8 @@ beforeEach(() => {
   router.beforeEach(applyMiddlewares);
 });
 
-describe("Navigation with middlewares", () => {
-  it("should call middleware on route with meta.middlewares", async () => {
+describe('Navigation with middlewares', () => {
+  it('should call middleware on route with meta.middlewares', async () => {
     const wrapper = mount(TestComponent, {
       global: {
         plugins: [router],
@@ -69,14 +70,14 @@ describe("Navigation with middlewares", () => {
     });
 
     // Start navigation
-    await router.push("/protected");
+    await router.push('/protected');
     await router.isReady();
 
     expect(protectedMiddleware).toHaveBeenCalled();
-    expect(wrapper.html()).toContain("Test Page");
+    expect(wrapper.html()).toContain('Test Page');
   });
 
-  it("should not call middleware on route without meta.middlewares", async () => {
+  it('should not call middleware on route without meta.middlewares', async () => {
     protectedMiddleware.mockClear();
 
     const wrapper = mount(TestComponent, {
@@ -85,26 +86,26 @@ describe("Navigation with middlewares", () => {
       },
     });
 
-    await router.push("/");
+    await router.push('/');
     await router.isReady();
 
     expect(protectedMiddleware).not.toHaveBeenCalled();
-    expect(wrapper.html()).toContain("Test Page");
+    expect(wrapper.html()).toContain('Test Page');
   });
 
-  it("should call parent middleware before child middleware", async () => {
+  it('should call parent middleware before child middleware', async () => {
     const wrapper = mount(ParentComponent, {
       global: {
         plugins: [router],
       },
     });
 
-    await router.push("/parent/child");
+    await router.push('/parent/child');
     await router.isReady();
 
     expect(parentMiddleware).toHaveBeenCalledBefore(childMiddleware);
 
-    expect(wrapper.html()).toContain("Parent Page");
-    expect(wrapper.html()).toContain("Test Page");
+    expect(wrapper.html()).toContain('Parent Page');
+    expect(wrapper.html()).toContain('Test Page');
   });
 });

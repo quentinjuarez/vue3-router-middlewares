@@ -1,16 +1,17 @@
-import type { NavigationGuard, NavigationGuardWithThis } from "vue-router";
-import evaluateGuards from "./guards";
+import type { NavigationGuard, NavigationGuardWithThis } from 'vue-router';
+
+import evaluateGuards from './guards';
 
 // Function to validate the middleware array
 const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {
   if (!Array.isArray(middlewares)) {
-    throw new Error("vue3-router-middlewares: Middlewares should be an array");
+    throw new Error('vue3-router-middlewares: Middlewares should be an array');
   }
 
   middlewares.forEach((middleware) => {
-    if (typeof middleware !== "function") {
+    if (typeof middleware !== 'function') {
       throw new Error(
-        "vue3-router-middlewares: Middleware should be a function"
+        'vue3-router-middlewares: Middleware should be a function',
       );
     }
   });

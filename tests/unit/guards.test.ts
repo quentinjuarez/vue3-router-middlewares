@@ -1,22 +1,23 @@
-import { describe, it, expect, vi } from "vitest";
-import evaluateGuards from "../../src/guards";
-import type { NavigationGuard, RouteLocationNormalized } from "vue-router";
+import { describe, it, expect, vi } from 'vitest';
+import type { NavigationGuard, RouteLocationNormalized } from 'vue-router';
 
-describe("evaluateGuards", () => {
-  it("should call next() if no guards are left", () => {
+import evaluateGuards from '../../src/guards';
+
+describe('evaluateGuards', () => {
+  it('should call next() if no guards are left', () => {
     const next = vi.fn();
 
     evaluateGuards(
       [],
       {} as RouteLocationNormalized,
       {} as RouteLocationNormalized,
-      next
+      next,
     );
 
     expect(next).toHaveBeenCalled();
   });
 
-  it("should call the guards in order", () => {
+  it('should call the guards in order', () => {
     const guard1 = vi.fn((to, from, next) => next());
     const guard2 = vi.fn((to, from, next) => next());
 
@@ -27,7 +28,7 @@ describe("evaluateGuards", () => {
       guards,
       {} as RouteLocationNormalized,
       {} as RouteLocationNormalized,
-      next
+      next,
     );
 
     expect(guard1).toHaveBeenCalled();
@@ -35,8 +36,8 @@ describe("evaluateGuards", () => {
     expect(next).toHaveBeenCalled();
   });
 
-  it("should stop if a guard passes an argument to next()", () => {
-    const guard1 = vi.fn((to, from, next) => next("stop"));
+  it('should stop if a guard passes an argument to next()', () => {
+    const guard1 = vi.fn((to, from, next) => next('stop'));
     const guard2 = vi.fn();
 
     const next = vi.fn();
@@ -46,11 +47,11 @@ describe("evaluateGuards", () => {
       guards,
       {} as RouteLocationNormalized,
       {} as RouteLocationNormalized,
-      next
+      next,
     );
 
     expect(guard1).toHaveBeenCalled();
     expect(guard2).not.toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith("stop");
+    expect(next).toHaveBeenCalledWith('stop');
   });
 });

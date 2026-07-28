@@ -2,13 +2,13 @@ import type {
   NavigationGuardWithThis,
   RouteLocationNormalized,
   NavigationGuardNext,
-} from "vue-router";
+} from 'vue-router';
 
 function evaluateGuards(
   guards: NavigationGuardWithThis<any>[],
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
-  next: NavigationGuardNext
+  next: NavigationGuardNext,
 ) {
   const guardsLeft = guards.slice(0); // Clone the array
   const nextGuard = guardsLeft.shift();

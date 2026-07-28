@@ -1,86 +1,133 @@
 # vue3-router-middlewares
 
-`vue3-router-middlewares` is a Vue 3 plugin for applying middleware functions to Vue Router navigation guards. It allows you to define and execute middleware functions before navigating to a route.
+Apply middleware functions to Vue Router navigation through route `meta` fields,
+including middlewares inherited from parent routes.
+
+[![npm version](https://img.shields.io/npm/v/vue3-router-middlewares)](https://www.npmjs.com/package/vue3-router-middlewares)
+[![npm downloads](https://img.shields.io/npm/dm/vue3-router-middlewares)](https://www.npmjs.com/package/vue3-router-middlewares)
+[![license](https://img.shields.io/npm/l/vue3-router-middlewares)](LICENSE)
+
+Works with Vue 3 and Vue Router 4 or 5.
 
 ## Installation
 
-To install the package, use npm or yarn:
-
 ```bash
-npm install vue3-router-middlewares
-# or
 yarn add vue3-router-middlewares
+# or
+npm install vue3-router-middlewares
 ```
+
+`vue` and `vue-router` are peer dependencies, so your project's own versions are
+used.
 
 ## Usage
 
-1. Import and Use the Plugin
+Register the plugin with your router instance:
 
-Import the plugin and use it with your Vue app, passing the router instance as an option.
+```ts
+import { createApp } from 'vue';
+import Vue3RouterMiddlewares from 'vue3-router-middlewares';
 
-```javascript
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import Vue3RouterMiddlewares from "vue3-router-middlewares";
+import App from './App.vue';
+import router from './router';
 
 const app = createApp(App);
 
 app.use(Vue3RouterMiddlewares, { router });
-app.mount("#app");
+app.mount('#app');
 ```
 
-2. Define Middlewares
+Then declare middlewares on any route through `meta.middlewares`:
 
-Define your middleware functions. Middleware functions should be plain functions that accept `to`, `from`, and `next` as arguments.
-
-```javascript
-const middleware1 = (to, from, next) => {
-  // Your logic here
+```ts
+const requireAuth = (to, from, next) => {
+  if (!isLoggedIn()) return next('/login');
   next();
 };
 
-const middleware2 = (to, from, next) => {
-  // Your logic here
+const requireAdmin = (to, from, next) => {
+  if (!isAdmin()) return next(false);
   next();
 };
-```
 
-3. Attach Middlewares to Routes
-
-Attach your middleware functions to routes using the `meta` property.
-
-```javascript
 const routes = [
   {
-    path: "/protected",
-    component: () => import("./components/Protected.vue"),
-    meta: {
-      middlewares: [middleware1, middleware2],
-    },
+    path: '/admin',
+    component: () => import('./Admin.vue'),
+    meta: { middlewares: [requireAuth, requireAdmin] },
   },
-  // other routes
 ];
 ```
 
-## TypeScript Definitions
+## How middlewares run
 
-The package includes TypeScript definitions. The RouteMeta interface is extended to include an optional middlewares property.
+- Middlewares are collected from **every matched route record**, so a middleware
+  declared on a parent route also runs for its children. Parents run first.
+- They run in sequence. Calling `next()` with no argument hands over to the next
+  middleware, and once the last one calls `next()` the navigation proceeds.
+- Calling `next()` with any argument short-circuits the chain and hands the value
+  straight to Vue Router, so `next('/login')` redirects and `next(false)` aborts.
+- A route with no middlewares navigates without any extra work.
 
-```typescript
-import type {
-  RouteLocationNormalized,
-  NavigationGuardNext,
-  NavigationGuard,
-} from "vue-router";
+## API
 
-declare module "vue-router" {
+### `Vue3RouterMiddlewares`
+
+The default export, a Vue plugin. It requires a `{ router }` option and throws
+`vue3-router-middlewares: Router is required` if it is missing. It registers a
+single `router.beforeEach` guard.
+
+### `applyMiddlewares`
+
+The navigation guard itself, exported for cases where you would rather wire it up
+yourself instead of installing the plugin:
+
+```ts
+import { applyMiddlewares } from 'vue3-router-middlewares';
+
+router.beforeEach(applyMiddlewares);
+```
+
+It throws if `meta.middlewares` is not an array, or if any entry is not a
+function.
+
+## TypeScript
+
+The package ships a module augmentation that adds `middlewares` to Vue Router's
+`RouteMeta`. Either reference the shipped declaration once in your project:
+
+```ts
+import 'vue3-router-middlewares/src/types.d.ts';
+```
+
+Or declare it yourself:
+
+```ts
+import type { NavigationGuard } from 'vue-router';
+
+declare module 'vue-router' {
   interface RouteMeta {
     middlewares?: NavigationGuard[];
   }
 }
 ```
 
+## Development
+
+```bash
+yarn install
+yarn verify      # lint, format check, typecheck, tests, build
+yarn test:watch
+```
+
+## Releasing
+
+Bump the version in `package.json`, then:
+
+```bash
+yarn release     # runs yarn verify, then yarn npm publish
+```
+
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT. See [LICENSE](LICENSE).

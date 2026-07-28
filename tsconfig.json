@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "esModuleInterop": true,
-    "strict": true,
     "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts", "src/types.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"],
+  "exclude": ["dist", "example", "node_modules"]
 }
