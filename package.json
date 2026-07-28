@@ -1,6 +1,6 @@
 {
   "name": "vue3-router-middlewares",
-  "version": "1.0.0",
+  "version": "0.0.11",
   "description": "Apply middleware functions to Vue Router navigation through route meta fields.",
   "keywords": [
     "middleware",
@@ -36,7 +36,7 @@
     "format": "oxfmt . '!**/global.d.ts'",
     "format:check": "oxfmt --check . '!**/global.d.ts'",
     "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build",
-    "release": "yarn verify && yarn npm publish"
+    "release": "bash scripts/release.sh"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.18",
