@@ -1,6 +1,6 @@
 {
   "name": "vue3-router-middlewares",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Apply middleware functions to Vue Router navigation through route meta fields.",
   "keywords": [
     "middleware",
