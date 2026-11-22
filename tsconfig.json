@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "CommonJS",
-    "moduleResolution": "Node10",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "strict": true,
-    "outDir": "dist"
+    "outDir": "dist/esm"
   },
   "include": ["src"],
   "exclude": ["dist", "example", "node_modules"]

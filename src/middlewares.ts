@@ -1,6 +1,6 @@
 import type { NavigationGuard, NavigationGuardWithThis } from 'vue-router';
 
-import evaluateGuards from './guards';
+import evaluateGuards from './guards.js';
 
 // Function to validate the middleware array
 const checkMiddlewaresValidity = (middlewares: NavigationGuard[]) => {

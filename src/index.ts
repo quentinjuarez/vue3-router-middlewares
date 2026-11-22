@@ -1,7 +1,7 @@
 import type { App, ObjectPlugin } from 'vue';
 import type { Router } from 'vue-router';
 
-import applyMiddlewares from './middlewares';
+import applyMiddlewares from './middlewares.js';
 
 // Define the plugin properly as a Plugin type
 const Vue3RouterMiddlewares: ObjectPlugin<{ router: Router }> = {
