@@ -37,6 +37,21 @@ app.use(Vue3RouterMiddlewares, { router });
 app.mount('#app');
 ```
 
+The package ships both ESM and CommonJS builds, each with its own types:
+
+```js
+// ESM
+import Vue3RouterMiddlewares, {
+  applyMiddlewares,
+} from 'vue3-router-middlewares';
+
+// CommonJS
+const {
+  default: Vue3RouterMiddlewares,
+  applyMiddlewares,
+} = require('vue3-router-middlewares');
+```
+
 Then declare middlewares on any route through `meta.middlewares`:
 
 ```ts
@@ -116,7 +131,7 @@ declare module 'vue-router' {
 
 ```bash
 yarn install
-yarn verify      # lint, format check, typecheck, tests, build
+yarn verify      # lint, format check, typecheck, tests, build, ESM and CJS smoke tests
 yarn test:watch
 ```
 
