@@ -38,6 +38,7 @@
     "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build"
   },
   "devDependencies": {
+    "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.0.18",
     "@vue/compiler-dom": "^3.5.40",
     "@vue/test-utils": "^2.4.11",
