@@ -35,7 +35,8 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt . '!**/global.d.ts'",
     "format:check": "oxfmt --check . '!**/global.d.ts'",
-    "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build"
+    "test:dist": "node tests/smoke/dist.cjs",
+    "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build && yarn test:dist"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",
