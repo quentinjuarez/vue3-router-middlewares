@@ -35,9 +35,11 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt . '!**/global.d.ts'",
     "format:check": "oxfmt --check . '!**/global.d.ts'",
-    "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build"
+    "test:dist": "node tests/smoke/dist.cjs",
+    "verify": "yarn lint && yarn format:check && yarn typecheck && yarn test && yarn build && yarn test:dist"
   },
   "devDependencies": {
+    "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.0.18",
     "@vue/compiler-dom": "^3.5.40",
     "@vue/test-utils": "^2.4.11",

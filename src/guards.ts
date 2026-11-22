@@ -18,8 +18,13 @@ function evaluateGuards(
     return;
   }
 
-  const applyNext = (nextArg: any) => {
-    if (!nextArg) {
+  let settled = false;
+
+  const applyNext = (nextArg?: any) => {
+    if (settled) return;
+    settled = true;
+
+    if (nextArg === undefined) {
       evaluateGuards(guardsLeft, to, from, next);
       return;
     }
@@ -27,7 +32,29 @@ function evaluateGuards(
     next(nextArg);
   };
 
-  nextGuard(to, from, applyNext as NavigationGuardNext);
+  const fail = (error: unknown) => {
+    if (settled) {
+      console.error('vue3-router-middlewares:', error);
+      return;
+    }
+    settled = true;
+    next(error as Error);
+  };
+
+  try {
+    const result: unknown = nextGuard(
+      to,
+      from,
+      applyNext as NavigationGuardNext,
+    );
+    if (
+      typeof (result as PromiseLike<unknown> | undefined)?.then === 'function'
+    ) {
+      Promise.resolve(result).catch(fail);
+    }
+  } catch (error) {
+    fail(error);
+  }
 }
 
 export default evaluateGuards;
